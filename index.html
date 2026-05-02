@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OnlineCert QR-Code Logo Generator</title>
+    <script type='text/javascript' src='https://api.netlify.com/hcipOFsW1LwlctI-reoT-0l5vUWH5nAt8wvJO06hZvPZJAvwovd6JOgn6BRiqh0E2i87pzAaXkN6rg0V-j-K2GdB408172y7HbG7iDBgICepwaL_25mTC5XXrglTVQ2KLmj7MQx5qB9QQgSdC5POlAuQMyR4NgZTV1dGL3i9rZToHzRL7CmVb4PyFMLr6cRi0he8WzJ4N3A6xy_7Fjo5ZGtcpYggNaj5NWOp8zhS4Z_HopOzpa7UJG68ICn7eSA0zN2Y1V5nqM3Bdf_Jb-JxslSDHyJnK3sSBvaEiTghTmz-5mnkBB-G4dOopqUp1TsdTIbPZOIknR99qaEZ_BjPnD_NWsmJCuzYisD7M0g_rE0TYIJT2B1khYtakP1xGwFIpxIhbwoZrECyxEeBkwMVOdTWTzcdQ7V0Qb2EPlOlEEXgsv5MrGsSEu45eAVo_mY1pF7-CbZRWTw5sJ7R-L9fd5fKgglIcNJuoEuLMBGmASY1TfPx502wwzd4jT_0_WiLykR9-DQIkULy-lyUNkEF'></script><script src="https://cdnjs.cloudflare.com/ajax/libs/qrious/4.0.2/qrious.min.js"></script>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            overflow: hidden;
+        }
+        .header {
+            background: linear-gradient(135deg, #4285f4 0%, #2196f3 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+        .header h1 {
+            margin: 0;
+            font-size: 28px;
+            font-weight: 300;
+        }
+        .header p {
+            margin: 10px 0 0 0;
+            opacity: 0.9;
+        }
+        .content {
+            padding: 40px;
+        }
+        .input-group {
+            margin-bottom: 25px;
+        }
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #333;
+        }
+        input[type="text"], select {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+            box-sizing: border-box;
+            background: white;
+        }
+        input[type="text"]:focus, select:focus {
+            outline: none;
+            border-color: #4285f4;
+        }
+        select {
+            cursor: pointer;
+        }
+        .logo-preview {
+            max-width: 300px;
+            max-height: 100px;
+            margin: 15px 0;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            background: white;
+            padding: 10px;
+        }
+        .generate-btn {
+            background: linear-gradient(135deg, #4285f4 0%, #2196f3 100%);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s;
+            width: 100%;
+        }
+        .generate-btn:hover {
+            transform: translateY(-2px);
+        }
+        .generate-btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+        }
+        .preview-section {
+            margin-top: 40px;
+            text-align: center;
+            display: none;
+        }
+        .preview-section.show {
+            display: block;
+        }
+        #preview-canvas {
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            margin: 20px 0;
+            max-width: 100%;
+            background: white;
+        }
+        .download-buttons {
+            margin-top: 20px;
+        }
+        .download-btn {
+            background: #4CAF50;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 6px;
+            margin: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background 0.3s;
+        }
+        .download-btn:hover {
+            background: #45a049;
+        }
+        .url-display {
+            background: #f8f9fa;
+            border: 1px solid #e9ecef;
+            border-radius: 6px;
+            padding: 10px;
+            margin-top: 10px;
+            word-break: break-all;
+            font-family: monospace;
+            font-size: 12px;
+            color: #666;
+        }
+        .example {
+            color: #666;
+            font-size: 14px;
+            font-style: italic;
+            margin-top: 5px;
+        }
+        .step {
+            background: #f8f9fa;
+            border-left: 4px solid #4285f4;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 0 8px 8px 0;
+        }
+        .step h4 {
+            margin: 0 0 10px 0;
+            color: #333;
+        }
+        .logo-info {
+            background: #e8f5e8;
+            padding: 10px;
+            border-radius: 6px;
+            margin-top: 10px;
+            border: 1px solid #c3e6c3;
+            font-size: 14px;
+            color: #2e7d32;
+        }
+        .loading {
+            color: #666;
+            font-style: italic;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🏆 OnlineCert Logo Generator</h1>
+            <p>Professionelle Logos mit individuellen QR-Codes</p>
+        </div>
+        
+        <div class="content">
+            <div class="step">
+                <h4>📋 Schritt 1: Logo-Variante auswählen</h4>
+                <select id="logo-select" onchange="loadSelectedLogo()">
+                    <option value="9001-DE" selected>ISO 9001:2015 - Deutsch</option>
+                    <option value="14001-DE">ISO 14001:2015 - Deutsch</option>
+                    <option value="45001-DE">ISO 45001:2018 - Deutsch</option>
+                    <option value="9001-EN">ISO 9001:2015 - English</option>
+                    <option value="14001-EN">ISO 14001:2015 - English</option>
+                    <option value="45001-EN">ISO 45001:2018 - English</option>
+                    <option value="9001-ES">ISO 9001:2015 - Español</option>
+                    <option value="14001-ES">ISO 14001:2015 - Español</option>
+                    <option value="45001-ES">ISO 45001:2018 - Español</option>
+                    <option value="9001-FR">ISO 9001:2015 - Français</option>
+                    <option value="14001-FR">ISO 14001:2015 - Français</option>
+                    <option value="45001-FR">ISO 45001:2018 - Français</option>
+                </select>
+                
+                <div class="logo-info">
+                    💡 <strong>Info:</strong> Logo-Dateien liegen im <code>/logos/</code> Ordner.
+                </div>
+                
+                <img id="logo-preview" class="logo-preview" style="display: none;" alt="Logo Vorschau">
+                <div id="logo-status" class="loading">Logo wird geladen...</div>
+            </div>
+
+            <div class="step">
+                <h4>🔗 Schritt 2: Validierungs-URL eingeben</h4>
+                <input type="text" id="validation-url" placeholder="https://script.google.com/macros/s/.../exec?verify=OC-202512-1234">
+                <div class="example">Beispiel: https://script.google.com/macros/s/ABC.../exec?verify=OC-202512-1234</div>
+            </div>
+            
+            <button class="generate-btn" onclick="generateLogo()" id="generate-button">🔄 Logo mit QR-Code erstellen</button>
+            
+            <div class="preview-section" id="preview-section">
+                <h3>📋 Vorschau:</h3>
+                <canvas id="preview-canvas"></canvas>
+                
+                <div class="url-display" id="url-display"></div>
+                
+                <div class="download-buttons">
+                    <button class="download-btn" onclick="downloadLogo('png')">📥 PNG herunterladen</button>
+                    <button class="download-btn" onclick="downloadLogo('jpg')">📥 JPG herunterladen</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Versteckter Canvas für QR-Code -->
+    <canvas id="qr-canvas" style="display: none;"></canvas>
+
+    <script>
+        let currentUrl = '';
+        let logoImage = null;
+        let selectedLogoType = '9001-DE';
+
+        // Logo-Pfade
+        const logoConfig = {
+            '9001-DE': { path: './logos/onlinecert-9001-de.png', name: 'ISO 9001:2015 - Deutsch' },
+            '14001-DE': { path: './logos/onlinecert-14001-de.png', name: 'ISO 14001:2015 - Deutsch' },
+            '45001-DE': { path: './logos/onlinecert-45001-de.png', name: 'ISO 45001:2018 - Deutsch' },
+            '9001-EN': { path: './logos/onlinecert-9001-en.png', name: 'ISO 9001:2015 - English' },
+            '14001-EN': { path: './logos/onlinecert-14001-en.png', name: 'ISO 14001:2015 - English' },
+            '45001-EN': { path: './logos/onlinecert-45001-en.png', name: 'ISO 45001:2018 - English' },
+            '9001-ES': { path: './logos/onlinecert-9001-es.png', name: 'ISO 9001:2015 - Español' },
+            '14001-ES': { path: './logos/onlinecert-14001-es.png', name: 'ISO 14001:2015 - Español' },
+            '45001-ES': { path: './logos/onlinecert-45001-es.png', name: 'ISO 45001:2018 - Español' },
+            '9001-FR': { path: './logos/onlinecert-9001-fr.png', name: 'ISO 9001:2015 - Français' },
+            '14001-FR': { path: './logos/onlinecert-14001-fr.png', name: 'ISO 14001:2015 - Français' },
+            '45001-FR': { path: './logos/onlinecert-45001-fr.png', name: 'ISO 45001:2018 - Français' }
+        };
+
+        function loadSelectedLogo() {
+            const select = document.getElementById('logo-select');
+            selectedLogoType = select.value;
+            const statusDiv = document.getElementById('logo-status');
+            const preview = document.getElementById('logo-preview');
+            
+            statusDiv.textContent = 'Logo wird geladen...';
+            statusDiv.className = 'loading';
+            preview.style.display = 'none';
+            
+            logoImage = new Image();
+            logoImage.onload = function() {
+                preview.src = logoImage.src;
+                preview.style.display = 'block';
+                statusDiv.textContent = `✅ ${logoConfig[selectedLogoType].name} geladen`;
+                statusDiv.className = '';
+                updateGenerateButton();
+            };
+            
+            logoImage.onerror = function() {
+                statusDiv.textContent = `❌ Logo nicht gefunden: ${logoConfig[selectedLogoType].path}`;
+                statusDiv.className = '';
+                logoImage = null;
+                updateGenerateButton();
+            };
+            
+            logoImage.src = logoConfig[selectedLogoType].path;
+        }
+
+        function updateGenerateButton() {
+            const button = document.getElementById('generate-button');
+            const url = document.getElementById('validation-url').value.trim();
+            
+            if (logoImage && url) {
+                button.disabled = false;
+                button.textContent = '🔄 Logo mit QR-Code erstellen';
+            } else {
+                button.disabled = true;
+                if (!logoImage) {
+                    button.textContent = '⚠️ Logo wird geladen...';
+                } else if (!url) {
+                    button.textContent = '⚠️ Bitte URL eingeben';
+                }
+            }
+        }
+
+        function generateLogo() {
+            const urlInput = document.getElementById('validation-url');
+            const url = urlInput.value.trim();
+            
+            if (!logoImage) {
+                alert('Das Logo wird noch geladen.');
+                return;
+            }
+            
+            if (!url) {
+                alert('Bitte geben Sie eine Validierungs-URL ein!');
+                return;
+            }
+            
+            if (!isValidUrl(url)) {
+                alert('Bitte geben Sie eine gültige URL ein!');
+                return;
+            }
+            
+            currentUrl = url;
+            document.getElementById('url-display').textContent = url;
+            
+            generateQRCode(url);
+            
+            setTimeout(() => {
+                createLogoWithQR();
+                document.getElementById('preview-section').classList.add('show');
+            }, 100);
+        }
+        
+        function isValidUrl(string) {
+            try {
+                new URL(string);
+                return true;
+            } catch (_) {
+                return false;
+            }
+        }
+        
+        function generateQRCode(url) {
+            const qrCanvas = document.getElementById('qr-canvas');
+            const qr = new QRious({
+                element: qrCanvas,
+                value: url,
+                size: 200,
+                background: 'white',
+                foreground: 'black',
+                level: 'M'
+            });
+        }
+        
+        function createLogoWithQR() {
+            const canvas = document.getElementById('preview-canvas');
+            const ctx = canvas.getContext('2d');
+            
+            // Größen
+            const logoHeight = 100;
+            const logoWidth = (logoImage.width / logoImage.height) * logoHeight;
+            const qrSize = 120;
+            const padding = 25;
+            
+            canvas.width = logoWidth + qrSize + padding * 3;
+            canvas.height = Math.max(logoHeight, qrSize) + padding * 2;
+            
+            // Weißer Hintergrund
+            ctx.fillStyle = 'white';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            
+            // Logo zeichnen
+            ctx.drawImage(logoImage, padding, padding, logoWidth, logoHeight);
+            
+            // QR-Code zeichnen
+            const qrCanvas = document.getElementById('qr-canvas');
+            const qrX = logoWidth + padding * 2;
+            const qrY = padding + (logoHeight - qrSize) / 2;
+            
+            ctx.drawImage(qrCanvas, qrX, qrY, qrSize, qrSize);
+        }
+        
+        function downloadLogo(format) {
+            const canvas = document.getElementById('preview-canvas');
+            const link = document.createElement('a');
+            
+            const fileName = `OnlineCert_${selectedLogoType}_QR.${format}`;
+            
+            if (format === 'png') {
+                link.download = fileName;
+                link.href = canvas.toDataURL('image/png');
+            } else {
+                link.download = fileName;
+                link.href = canvas.toDataURL('image/jpeg', 0.95);
+            }
+            
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+        
+        // Event Listeners
+        document.getElementById('validation-url').addEventListener('input', updateGenerateButton);
+        document.getElementById('validation-url').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                generateLogo();
+            }
+        });
+        
+        // Beim Laden
+        window.onload = function() {
+            loadSelectedLogo();
+        };
+    </script>
+</body>
+</html>
