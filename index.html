@@ -234,7 +234,11 @@
 
         // Logo-Pfade
         const logoConfig = {
-            '9001-DE': { path: './logos/onlinecert-9001-de.png', name: 'ISO 9001:2015 - Deutsch' },
+            '9001-DE': {
+                path: './logos/onlinecert-9001-de.png',
+                name: 'ISO 9001:2015 - Deutsch',
+                label: 'QM-System ISO9001:2015'
+            },
             '14001-DE': { path: './logos/onlinecert-14001-de.png', name: 'ISO 14001:2015 - Deutsch' },
             '45001-DE': { path: './logos/onlinecert-45001-de.png', name: 'ISO 45001:2018 - Deutsch' },
             '9001-EN': { path: './logos/onlinecert-9001-en.png', name: 'ISO 9001:2015 - English' },
@@ -348,27 +352,43 @@
         function createLogoWithQR() {
             const canvas = document.getElementById('preview-canvas');
             const ctx = canvas.getContext('2d');
+            const selectedLogo = logoConfig[selectedLogoType] || {};
             
             // Größen
             const logoHeight = 100;
             const logoWidth = (logoImage.width / logoImage.height) * logoHeight;
             const qrSize = 120;
             const padding = 25;
+            const labelText = selectedLogo.label || '';
+            const labelFontSize = 24;
+            const labelGap = labelText ? 16 : 0;
+            const labelHeight = labelText ? labelFontSize : 0;
+            const logoBlockHeight = logoHeight + labelGap + labelHeight;
+            const contentHeight = Math.max(logoBlockHeight, qrSize);
             
             canvas.width = logoWidth + qrSize + padding * 3;
-            canvas.height = Math.max(logoHeight, qrSize) + padding * 2;
+            canvas.height = contentHeight + padding * 2;
             
             // Weißer Hintergrund
             ctx.fillStyle = 'white';
             ctx.fillRect(0, 0, canvas.width, canvas.height);
             
+            const logoY = padding + (contentHeight - logoBlockHeight) / 2;
+
             // Logo zeichnen
-            ctx.drawImage(logoImage, padding, padding, logoWidth, logoHeight);
+            ctx.drawImage(logoImage, padding, logoY, logoWidth, logoHeight);
+
+            if (labelText) {
+                ctx.fillStyle = '#1b4f94';
+                ctx.font = `700 ${labelFontSize}px Segoe UI, Tahoma, sans-serif`;
+                ctx.textBaseline = 'top';
+                ctx.fillText(labelText, padding, logoY + logoHeight + labelGap);
+            }
             
             // QR-Code zeichnen
             const qrCanvas = document.getElementById('qr-canvas');
             const qrX = logoWidth + padding * 2;
-            const qrY = padding + (logoHeight - qrSize) / 2;
+            const qrY = padding + (contentHeight - qrSize) / 2;
             
             ctx.drawImage(qrCanvas, qrX, qrY, qrSize, qrSize);
         }
