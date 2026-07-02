@@ -233,24 +233,27 @@
         let selectedLogoType = '9001-DE';
 
         // Logo-Pfade
-        const logoConfig = {
-            '9001-DE': {
-                path: './logos/onlinecert-9001-de.png',
-                name: 'ISO 9001:2015 - Deutsch',
-                label: 'QM-System ISO9001:2015'
-            },
-            '14001-DE': { path: './logos/onlinecert-14001-de.png', name: 'ISO 14001:2015 - Deutsch' },
-            '45001-DE': { path: './logos/onlinecert-45001-de.png', name: 'ISO 45001:2018 - Deutsch' },
-            '9001-EN': { path: './logos/onlinecert-9001-en.png', name: 'ISO 9001:2015 - English' },
-            '14001-EN': { path: './logos/onlinecert-14001-en.png', name: 'ISO 14001:2015 - English' },
-            '45001-EN': { path: './logos/onlinecert-45001-en.png', name: 'ISO 45001:2018 - English' },
-            '9001-ES': { path: './logos/onlinecert-9001-es.png', name: 'ISO 9001:2015 - Español' },
-            '14001-ES': { path: './logos/onlinecert-14001-es.png', name: 'ISO 14001:2015 - Español' },
-            '45001-ES': { path: './logos/onlinecert-45001-es.png', name: 'ISO 45001:2018 - Español' },
-            '9001-FR': { path: './logos/onlinecert-9001-fr.png', name: 'ISO 9001:2015 - Français' },
-            '14001-FR': { path: './logos/onlinecert-14001-fr.png', name: 'ISO 14001:2015 - Français' },
-            '45001-FR': { path: './logos/onlinecert-45001-fr.png', name: 'ISO 45001:2018 - Français' }
-        };
+const logoConfig = {
+    // === Deutsch ===
+    '9001-DE':  { path: './logos/onlinecert-9001-de.png',  name: 'ISO 9001:2015 - Deutsch',  label: 'QM-System ISO9001:2015' },
+    '14001-DE': { path: './logos/onlinecert-14001-de.png', name: 'ISO 14001:2015 - Deutsch', label: 'UM-System ISO14001:2015' },
+    '45001-DE': { path: './logos/onlinecert-45001-de.png', name: 'ISO 45001:2018 - Deutsch', label: 'AM-System ISO45001:2018' },
+
+    // === English ===
+    '9001-EN':  { path: './logos/onlinecert-9001-en.png',  name: 'ISO 9001:2015 - English',  label: 'QM-System ISO9001:2015' },
+    '14001-EN': { path: './logos/onlinecert-14001-en.png', name: 'ISO 14001:2015 - English', label: 'EM-System ISO14001:2015' },
+    '45001-EN': { path: './logos/onlinecert-45001-en.png', name: 'ISO 45001:2018 - English', label: 'OH&S-System ISO45001:2018' },
+
+    // === Español ===
+    '9001-ES':  { path: './logos/onlinecert-9001-es.png',  name: 'ISO 9001:2015 - Español',  label: 'Sistema SGC ISO9001:2015' },
+    '14001-ES': { path: './logos/onlinecert-14001-es.png', name: 'ISO 14001:2015 - Español', label: 'Sistema SGA ISO14001:2015' },
+    '45001-ES': { path: './logos/onlinecert-45001-es.png', name: 'ISO 45001:2018 - Español', label: 'Sistema SG-SST ISO45001:2018' },
+
+    // === Français ===
+    '9001-FR':  { path: './logos/onlinecert-9001-fr.png',  name: 'ISO 9001:2015 - Français',  label: 'Système SMQ ISO9001:2015' },
+    '14001-FR': { path: './logos/onlinecert-14001-fr.png', name: 'ISO 14001:2015 - Français', label: 'Système SME ISO14001:2015' },
+    '45001-FR': { path: './logos/onlinecert-45001-fr.png', name: 'ISO 45001:2018 - Français', label: 'Système SMS ISO45001:2018' }
+};
 
         function loadSelectedLogo() {
             const select = document.getElementById('logo-select');
